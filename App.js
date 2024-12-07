@@ -5,8 +5,8 @@ import Navigation from './Navigation.js';
 
 const App = () => {
     return (
-        // <Navigation/>
-        <View><Text>hi</Text></View>
+        <Navigation/>
+
     )
 }
 

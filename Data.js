@@ -10,9 +10,10 @@ const Data = [
 
         ],
         title: "Y1 Sem1",
-        bgColor: 'skyblue',
-        ico:'skull',
-        colo:'silver',
+        bgColor: '#cce7ff',
+        ico:'smile',
+        ico2:'frown',
+        colo:'#103366',
         outline:'textOutline'//controls outline
     },
     // Year 1 Sem2
@@ -24,10 +25,10 @@ const Data = [
             {code: 'C210', name: 'Programming Fundamentals II',grade: 'D+', credit: '4'},
         ],
         title: "Y1 Sem2",
-        bgColor: 'pink',
+        bgColor: '#d4f8e8',
         ico:'paintbrush',
-        colo:'khaki',
-        outline:'textOutline2'
+        colo:'#006644',
+        outline:'textOutline'
 
     },
     // Year 2 Sem1
@@ -39,52 +40,40 @@ const Data = [
             {code: 'C210', name: 'Programming Fundamentals II',grade: 'D+', credit: '4'},
         ],
         title: "Y2 Sem1",
-        bgColor: 'pink',
+        bgColor: '#fff5cc',
         ico:'paintbrush',
-        colo:'khaki',
+        colo:'#fFb2cc',
         outline:'textOutline2'
 
     },
     // Year 2 Sem2
     {
         data: [
-            {code: 'C207', name: 'Database Systems',grade: 'B', credit: '4'},
-            {code: 'C235', name: 'IT Security and Management',grade: 'B', credit: '4'},
-            {code: 'C109', name: 'IT in Business Processes',grade: 'C', credit: '4'},
-            {code: 'C210', name: 'Programming Fundamentals II',grade: 'D+', credit: '4'},
         ],
         title: "Y2 Sem2",
-        bgColor: 'pink',
+        bgColor: '#B45C00',
         ico:'paintbrush',
-        colo:'khaki',
+        colo:'#CCE5FF',
         outline:'textOutline2'
 
     },
     // Year 3 Sem1
     {
         data: [
-            {code: 'C207', name: 'Database Systems',grade: 'B', credit: '4'},
-            {code: 'C235', name: 'IT Security and Management',grade: 'B', credit: '4'},
-            {code: 'C109', name: 'IT in Business Processes',grade: 'C', credit: '4'},
-            {code: 'C210', name: 'Programming Fundamentals II',grade: 'D+', credit: '4'},
         ],
         title: "Y3 Sem1",
-        bgColor: 'pink',
+        bgColor: '#573AFF',
         ico:'paintbrush',
-        colo:'khaki',
+        colo:'#E2FF3A',
         outline:'textOutline2'
 
     },
     // Year 3 Sem2
     {
         data: [
-            {code: 'C207', name: 'Database Systems',grade: 'B', credit: '4'},
-            {code: 'C235', name: 'IT Security and Management',grade: 'B', credit: '4'},
-            {code: 'C109', name: 'IT in Business Processes',grade: 'C', credit: '4'},
-            {code: 'C210', name: 'Programming Fundamentals II',grade: 'D+', credit: '4'},
         ],
         title: "Y3 Sem2",
-        bgColor: 'pink',
+        bgColor: '#333333',
         ico:'paintbrush',
         colo:'khaki',
         outline:'textOutline2'
@@ -93,3 +82,16 @@ const Data = [
 ];
 
 export {Data}
+
+//Year 2 Sem2
+// {
+//     data: [
+//         {} gives a white box
+//     ],
+//         title: "Y2 Sem2",
+//     bgColor: '#B45C00',
+//     ico:'paintbrush',
+//     colo:'#CCE5FF',
+//     outline:'textOutline2'
+//
+// },

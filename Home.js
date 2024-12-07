@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, View, SectionList, TouchableOpacity, Image,Button,StatusBar } from "react-native";
+import {StyleSheet, Text, View, SectionList, TouchableOpacity, Image, Button, StatusBar, Alert} from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome6";
 import {Data} from './Data';
 
@@ -39,32 +39,131 @@ const Home = ({navigation}) => {
         );
     };
 
-    const renderSectionHeader = ({ section: { title, bgColor,ico,colo,outline } }) => (
+    const renderSectionHeader = ({ section: { title, bgColor, colo, index } }) => {// remove receiving prop of ico and outline
+        const gpa = parseFloat( calculateGPAPerSem(index)); // Converts GPA into a number for comparison
+        const smile='smile'; //added default values for ico (if this line is place under const selectedIcon, it can't access it)
+        const frown='frown';
+        const selectedIcon = gpa < 2.0 ? frown : smile; // conditional icon selection (ternary operator)
+        return (
+            <View style={{ backgroundColor: bgColor, padding: 10 }}>
+                <View style={{flexDirection:'row',justifyContent: 'space-between', alignItems: 'center', marginRight:10}}>
+                    <Text
+                    style={[styles.headerText, { color: colo }]}//removed outline, styles[outline]
+                >
+                    {title}
+                    </Text>
+                    <Icon style={styles.textOutline} name={selectedIcon} size={20} color={colo} />
 
-        <View style={{ backgroundColor: bgColor, padding:10 }}>
+                </View>
+                <Text style={{ color: colo }}>GPA: {gpa}</Text>
+            </View>
+        );
+    };
 
-            <Text style={[styles.headerText, styles[outline], {color: colo }]}>
+    const calculateGPAPerSem = (semesterIndex) => {
+        let totalCredits = 0;
+        let totalGradePoints = 0;
 
-                <Icon name={ico} size={20} color={colo}  />
+        const semesterData = Data[semesterIndex];
 
-                {title}</Text>
+        if (semesterData && semesterData.data) {
+            semesterData.data.forEach(item => {
+                if (item && item.grade && item.credit) {
+                    let gradePoint = -1;
 
-        </View>
-    );
+                    if (item.grade === 'A') gradePoint = 4;
+                    else if (item.grade === 'B+') gradePoint = 3.5;
+                    else if (item.grade === 'B') gradePoint = 3;
+                    else if (item.grade === 'C+') gradePoint = 2.5;
+                    else if (item.grade === 'C') gradePoint = 2;
+                    else if (item.grade === 'D+') gradePoint = 1.5;
+                    else if (item.grade === 'D') gradePoint = 1;
+                    else if (item.grade === 'E') gradePoint = 0.5;
+                    else if (item.grade === 'F') gradePoint = 0;
+
+                    if (gradePoint !== -1) {
+                        totalCredits += parseInt(item.credit, 10);
+                        totalGradePoints += gradePoint * parseInt(item.credit, 10);
+                    }
+                }
+            });
+        }
+
+        return totalCredits === 0 ? 0 : (totalGradePoints / totalCredits).toFixed(2);
+    };
+
+
+
+    const calculateGPA = () => {
+        let totalCredits = 0;
+        let totalGradePoints = 0;
+
+        Data.forEach(section => {
+            section.data.forEach(item => {
+                // Ensure item exists and has required properties
+                if (item && item.grade && item.credit) {
+                    let gradePoint = -1;
+
+                    // Map grades to grade points
+                    if (item.grade === 'A') gradePoint = 4;
+                    else if (item.grade === 'B+') gradePoint = 3.5;
+                    else if (item.grade === 'B') gradePoint = 3;
+                    else if (item.grade === 'C+') gradePoint = 2.5;
+                    else if (item.grade === 'C') gradePoint = 2;
+                    else if (item.grade === 'D+') gradePoint = 1.5;
+                    else if (item.grade === 'D') gradePoint = 1;
+                    else if (item.grade === 'E') gradePoint = 0.5;
+                    else if (item.grade === 'F') gradePoint = 0;
+
+                    // Accumulate grade points and credits
+                    if (gradePoint !== -1) {
+                        totalCredits += parseInt(item.credit, 10);
+                        //hello it's me Jason, parseInt turns string into integer basically
+                        //eg.
+                        // console.log(parseInt('123'));
+                        //123 (default base-10)
+
+                        // Radix is just the type you want it to convert to
+                        // eg. console.log(parseInt('ff', 16));
+                        // // 255 (lower-case hexadecimal)
+
+                        totalGradePoints += gradePoint * parseInt(item.credit, 10);
+                    }
+                }
+            });
+        });
+
+        // Calculate GPA (ternary operation)
+        // (if total credit =0, then returns 0 to avoid dividing by zero)
+        // else do (totalGradePoints / totalCredits) to 2 decimal place
+        return totalCredits === 0 ? 0 : (totalGradePoints / totalCredits).toFixed(2);
+    };
 
     return (
-        <View style={{ marginBottom: 20, marginTop: 50 }}>
-            <Text style={styles.title}>Scarlet & Violet - 151 Expansion Pack</Text>
+        <View style={{ marginBottom: 137, marginTop: 50 }}>
+            <Text style={styles.title}>Modules GPA Calculator</Text>
 
-            <Button title="Add Pokemon button" onPress={() => {navigation.navigate('Add')}}
+            <Button title="Add Modules" onPress={() => {navigation.navigate('Add')}}
             />
 
 
             <SectionList
-                sections={Data}
+                sections={Data.map((section, index) => ({
+                    ...section,
+                    index,
+                }))}
                 renderItem={renderItem}
                 renderSectionHeader={renderSectionHeader}
                 keyExtractor={(item, index) => index.toString()}
+            />
+            {/*Calculate GPA*/}
+            {/*Calculate GPA*/}
+            <Button
+                title="Calculate"
+                onPress={() => {
+                    const GPA = calculateGPA();
+                    Alert.alert("GPA Calculation", `Your average GPA is: ${GPA}`, [{ text: "OK" }]);
+                }}
             />
         </View>
     );
@@ -74,15 +173,14 @@ const Home = ({navigation}) => {
 const styles = StyleSheet.create({
         headerText: {
             fontSize: 20,
-            margin: 10,
-            textAlign: "center",
-            fontWeight: "bold",
+            // margin: 10,
+            textAlign: "left",
+            fontWeight: "bold"
         },
         opacityStyle: {
             flexDirection: 'row',  // Align name and image horizontally
             borderWidth: 1,
             padding: 10,
-            marginVertical: 5,
             alignItems: 'center',  // Center the items vertically
         },
         CodeStyle: {
@@ -106,13 +204,6 @@ const styles = StyleSheet.create({
             height: 300, // Adjust image size
             borderRadius: 5,
         },
-        textOutline: {
-            color: 'black', // Outline color
-            fontWeight: 'bold',
-            textShadowColor: 'black',
-            textShadowOffset: {width: -1, height: 1}, // Shadow directions
-            textShadowRadius: 1, // Spread of the shadow
-        },
 
         title:{
             fontSize: 20,
@@ -123,8 +214,15 @@ const styles = StyleSheet.create({
             backgroundColor:"red"
 
         },
+
+        textOutline: {
+            color: 'black', // Default text color
+            fontWeight: 'bold',
+            textShadowColor: 'black',
+            textShadowRadius: 2, // Spread of the shadow
+        },
         textOutline2: {
-            color: 'black', // Outline color
+            color: 'black', // Default text color
             fontWeight: 'bold',
             textShadowColor: 'black',
             textShadowOffset: {width: -1, height: 1}, // Shadow directions
